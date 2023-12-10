@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 #include <iostream> 
 #include <string>
 using namespace std;
@@ -962,5 +962,5 @@ int main() {
     bia.print();
 
     return 0;
->>>>>>> 77a1805ab9cbd06e40f5df31d620c0d29838b3a7
+
 }
