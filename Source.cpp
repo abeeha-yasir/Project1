@@ -224,10 +224,10 @@ string Student::getContact() {
     return contact;
 }
 
-void Student::disp(int n=0) {
+void Student::disp(int n=0) {print();
     for (size_t i = 0; i < ts; i++)
     {
-        print();
+        
         courses[i]->print();
        if(n==2) cout << "Attendance :" << attendance[i] << "%" << endl;
        if (n == 1)cout << "Marks :" << marks[i] << "%"<<endl;
@@ -941,18 +941,19 @@ public:
             switch (choice) {
             case '1':
                 Stumenu();
+                db();
                 break;
             case '2':
-                coregMenu();
+                coregMenu(); db();
                 break;
             case '3':
-                attmenu();
+                attmenu(); db();
                 break;
             case '4':
-                markmenu();
+                markmenu(); db();
                 break;
             case '5':
-                cowiMenu();
+                cowiMenu(); db();
                 break;
             case '6':
                 cout << "System exited"; return;
@@ -983,16 +984,16 @@ public:
 
             switch (choice) {
             case '1':
-                dispstu();
+                dispstu(); db();
                 break;
             case '2':
-                addstudent();
+                addstudent(); db();
                 break;
             case '3':
-                removestudent();
+                removestudent(); db();
                 break;
             case '4':
-                upstu();
+                upstu(); db();
                 break;
             case '5':
                  return;
@@ -1025,14 +1026,14 @@ public:
 
             switch (choice) {
             case '1':
-                dispcourse();
+                dispcourse(); db();
                 break;
             case '2':
                
-               regis();
+               regis(); db();
                 break;
             case '3':
-                addCourse();
+                addCourse(); db();
                 break;
             case '4':
                return;
@@ -1083,13 +1084,13 @@ public:
 
             switch (choice) {
             case '1':
-                stuco();
+                stuco(); db();
                 break;
             case '2':
-                withdraw();
+                withdraw(); db();
                 break;
             case '3':
-                removeCourse();
+                removeCourse(); db();
                 break;
             case '4':
                return;
@@ -1114,10 +1115,10 @@ public:
 
             switch (choice) {
             case '1':
-                stuco(1);
+                stuco(1); db();
                 break;
             case '2':
-                assmark();
+                assmark(); db();
                 break;
             case '3':
             
@@ -1145,10 +1146,10 @@ public:
 
             switch (choice) {
             case '1':
-                stuco(2);
+                stuco(2); db();
                 break;
             case '2':
-              assat(); break;
+              assat(); db(); break;
             case '3':
 
                return;
