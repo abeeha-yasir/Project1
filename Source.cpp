@@ -1,72 +1,75 @@
 #include <iostream> 
 #include <string>
-
+#include <fstream>
+#include"course.h"
+#include"student.h"
 using namespace std;
 
-
+ofstream fout;
+ifstream fin;
 class Student;
 class Course;
 
-class Student {
-private:
-    string name;
-    int roll_num;
-    int age;
-    string contact;
-    Course** courses;
-    int ts;
-    int* attendance;
-    int* marks;
-
-public:
-
-    Student(string n, int r, int a, string c);
-
-    void Update(string n, int r, int a, string c);
-    bool search(Course& a);
-
-    string getName();
-    int getRollNum();
-    int getAge();
-
-
-
-    void setName(string n);
-    void setRollNum(int r);
-    void setAge(int a);
-    void setContact(string c);
-
-
-    void print();
-    void disp();
-    void registerCourse(Course& a);
-    void withdraw(Course& a);
-    void markAttendance(Course& a, int at);
-    void assignMarks(Course& a, int at);
-};
-
-class Course {
-
-private:
-    int  code;
-    string name;
-    string instructor;
-    int credits;
-    int capacity;
-    Student** students;
-    int ts;
-
-public:
-
-    Course(int code, string name, string instructor, int credits, int capacity);
-    void disp();
-    void print();
-    void enroll(Student& a);
-    int getid();
-    void unenroll(Student& a);
-    bool search(Student& a);
-};
-
+//class Student {
+//private:
+//    string name;
+//    int roll_num;
+//    int age;
+//    string contact;
+//    Course** courses;
+//    int ts;
+//    int* attendance;
+//    int* marks;
+//
+//public:
+//    
+//    Student(string n, int r, int a, string c);
+//
+//    void Update(string n, int r, int a, string c);
+//    bool search(Course& a);
+//
+//    string getName();
+//    int getRollNum();
+//    int getAge();
+//
+//
+//
+//    void setName(string n);
+//    void setRollNum(int r);
+//    void setAge(int a);
+//    void setContact(string c);
+//
+//
+//    void print();
+//    void disp(int i);
+//    void registerCourse(Course& a);
+//    void withdraw(Course& a);
+//    void markAttendance(Course& a, int at);
+//    void assignMarks(Course& a, int at);
+//};
+//
+//class Course {
+//
+//private:
+//    int  code;
+//    string name;
+//    string instructor;
+//    int credits;
+//    int capacity;
+//    Student** students;
+//    int ts;
+//
+//public:
+//
+//    Course(int code, string name, string instructor, int credits, int capacity);
+//    void disp();
+//    void print();
+//    void enroll(Student& a);
+//    int getid();
+//    void unenroll(Student& a);
+//    bool search(Student& a);
+//};
+//
 
 Course::Course(int code, string name, string instructor, int credits, int capacity)
     : code(code), name(name), instructor(instructor), credits(credits), capacity(capacity) {
@@ -96,6 +99,10 @@ void Course::print() {
     cout << "instructor: " << instructor << endl;
     cout << "Credits: " << credits << endl;
 }
+int Course::getCredits() const {
+    return credits;
+}
+
 void Course::enroll(Student& a) {
 
     if (ts == capacity) { cout << "Maximum Students already enrolled\n"; }
@@ -159,6 +166,19 @@ void Course::unenroll(Student& a)
 
 
 }
+
+
+
+int Course:: getCapacity() const {
+    return capacity;
+}
+string Course:: getInstructor() {
+    return instructor;
+}
+string Course ::getName()  {
+    return name;
+}
+
 bool Course::search(Student& a)
 {
 
@@ -176,7 +196,7 @@ Student::Student(string n, int r, int a, string c) :
     name(n), roll_num(r), age(a), contact(c) {
     ts = 0;
 }
-void Student:: Update (string n, int r, int a, string c) {
+void Student::Update(string n, int r, int a, string c) {
     name = n;  roll_num = r; age = a; contact = c;
     ts = 0;
 }
@@ -200,15 +220,17 @@ void Student::print() {
     cout << "Contact: " << contact << endl;
 
 }
+string Student::getContact() {
+    return contact;
+}
 
-
-void Student::disp() {
+void Student::disp(int n=0) {
     for (size_t i = 0; i < ts; i++)
     {
         print();
         courses[i]->print();
-        cout << "Attendance :" << attendance[i] << endl;
-        cout << "Marks :" << marks[i] << endl;
+       if(n==2) cout << "Attendance :" << attendance[i] << "%" << endl;
+       if (n == 1)cout << "Marks :" << marks[i] << "%"<<endl;
 
     }
 
@@ -299,7 +321,7 @@ void Student::withdraw(Course& a) {
         delete[] courses;
 
         courses = newArray;
-       
+
 
 
 
@@ -455,14 +477,14 @@ void Student::registerCourse(Course& a) {
 
 }
 
-class system {
+class flexsystem {
 private:
     Student** stu;
     Course** cor;
     int ts;
     int tc;
 public:
-    system()
+    flexsystem()
     {
         stu = NULL;
         cor = NULL;
@@ -483,7 +505,7 @@ public:
         cin >> a;
         cout << "Enter contact : "; string c;
         cin >> c;
-        if (r < 0||a<0) { cout << "invalid input \n Enter values again"; addstudent(); return; }
+        if (r < 0 || a < 0) { cout << "invalid input \n Enter values again"; addstudent(); return; }
         for (size_t i = 0; i < ts; i++)
         {
             if (stu[i]->getRollNum() == r)
@@ -491,8 +513,8 @@ public:
                 cout << "Roll number already in use \n Enter values again"; addstudent(); return;
 
             }
-           
-        } 
+
+        }
 
         int newSize = ts + 1;
         Student** newArray = new Student * [newSize];
@@ -517,7 +539,7 @@ public:
 
 
         stu[ts] = new Student(n, r, a, c);
-            ts++;
+        ts++;
 
 
 
@@ -538,7 +560,7 @@ public:
         int r;
         cout << "enter roll no :";
         cin >> r;
-       bool flag = false; int i = 0;
+        bool flag = false; int i = 0;
         for (i = 0; i < ts; i++)
         {
             if (stu[i]->getRollNum() == r) { flag = true; break; }
@@ -576,99 +598,101 @@ public:
     }
     void removeCourse()
     {
-       
-            int r;
-            cout << "enter Course id :";
-            cin >> r;
-            bool flag = false; int i = 0;
-            for (i = 0; i < ts; i++)
+
+        int r;
+        cout << "enter Course id :";
+        cin >> r;
+        bool flag = false; int i = 0;
+        for (i = 0; i < tc; i++)
+        {
+            if (cor[i]->getid() == r) { flag = true; break; }
+
+
+        }
+        if (!flag) { cout << "Student to be enrolled not registered n the system\n"; removestudent(); return; }
+        else {
+            for (int j = 0; j < tc; j++)
             {
-                if (cor[i]->getid() == r) { flag = true; break; }
-
-
-            }
-            if (!flag) { cout << "Student to be enrolled not registered n the system\n"; removestudent(); return; }
-            else {
-                for (int j = 0; j < tc; j++)
-                {
-                    if (stu[j]->search(*cor[i])) { stu[j]->withdraw(*cor[i]); }
-
-
-                }
-
-                int newSize = tc - 1;
-                Course** newArray = new Course * [newSize];
-
-
-                for (int j = 0, k = 0; j < ts; j++) {
-                    if (i != j) { newArray[k] = cor[j]; k++; }
-                }
-
-
-                delete[] cor;
-
-                cor = newArray;
-                tc--;
+                if (stu[j]->search(*cor[i])) { stu[j]->withdraw(*cor[i]); }
 
 
             }
 
-
-
-        
-    
-    
-    }
-    void addCourse() 
-    {
-            cout << "Enter course name : ";
-            string n;
-            cin >> n;
-            cout << "Enter course id : ";
-            int id;
-            cin >> id;
-            int c,ca;
-            cout << "Enter credits : ";
-            cin >> c;
-            cout << "Enter instructor name : "; string t;
-            cin >>t;
-            cout << "Enter capacity : ";
-            cin >> ca;
-
-            if (id < 1 || ca < 1||c<1) 
-            { cout << "invalid input \n Enter values again"; addCourse(); return; }
-            for (size_t i = 0; i < tc; i++)
-            {
-                if (cor[i]->getid() == id)
-                {
-                    cout << "Course code already in use \n Enter values again"; addCourse(); return;
-
-                }
-                
-
-
-
-            }
-
-
-            int newSize = tc + 1;
+            int newSize = tc - 1;
             Course** newArray = new Course * [newSize];
 
 
-            for (int i = 0; i < ts; i++) {
-                newArray[i] = cor[i];
+            for (int j = 0, k = 0; j < tc; j++) {
+                if (i != j) { newArray[k] = cor[j]; k++; }
             }
 
 
             delete[] cor;
 
+            cor = newArray;
+            tc--;
 
-            cor= newArray;
-            
-            
-            cor[tc] = new Course(id,n,t,c,ca);
 
-            tc++;
+        }
+
+
+
+
+
+
+    }
+    void addCourse()
+    {
+        cout << "Enter course name : ";
+        string n;
+        cin >> n;
+        cout << "Enter course id : ";
+        int id;
+        cin >> id;
+        int c, ca;
+        cout << "Enter credits : ";
+        cin >> c;
+        cout << "Enter instructor name : "; string t;
+        cin >> t;
+        cout << "Enter capacity : ";
+        cin >> ca;
+
+        if (id < 1 || ca < 1 || c < 1)
+        {
+            cout << "invalid input \n Enter values again"; addCourse(); return;
+        }
+        for (size_t i = 0; i < tc; i++)
+        {
+            if (cor[i]->getid() == id)
+            {
+                cout << "Course code already in use \n Enter values again"; addCourse(); return;
+
+            }
+
+
+
+
+        }
+
+
+        int newSize = tc + 1;
+        Course** newArray = new Course * [newSize];
+
+
+        for (int i = 0; i < tc; i++) {
+            newArray[i] = cor[i];
+        }
+
+
+        delete[] cor;
+
+
+        cor = newArray;
+
+
+        cor[tc] = new Course(id, n, t, c, ca);
+
+        tc++;
 
 
 
@@ -678,14 +702,16 @@ public:
     {
         cout << "Enter course id : ";
         int id;
+        cin >> id;
         cout << "Enter roll number: ";
         int r;
-        if (id < 1 || r< 1 )
+        cin >> r;
+        if (id < 1 || r < 1)
         {
             cout << "invalid input \n Enter values again"; enroll(); return;
         }
 
-       bool flag = false; int j = 0;
+        bool flag = false; int j = 0;
         for (j = 0; j < tc; j++)
         {
             if (cor[j]->getid() == id) { flag = true; break; }
@@ -694,7 +720,7 @@ public:
         }
         if (!flag) { cout << "Course to be enrolled not registered n the system\n"; enroll(); return; }
 
-         flag = false; int i = 0;
+        flag = false; int i = 0;
         for (i = 0; i < ts; i++)
         {
             if (stu[i]->getRollNum() == r) { flag = true; break; }
@@ -716,15 +742,17 @@ public:
     {
         cout << "Enter course id : ";
         int id;
+        cin >> id;
         cout << "Enter roll number: ";
         int r;
+        cin >> r;
         if (id < 1 || r < 1)
         {
             cout << "invalid input \n Enter values again"; enroll(); return;
         }
 
-        
-       bool flag = false; int i = 0;
+
+        bool flag = false; int i = 0;
         for (i = 0; i < ts; i++)
         {
             if (stu[i]->getRollNum() == r) { flag = true; break; }
@@ -741,7 +769,7 @@ public:
         }
         if (!flag) { cout << "Course to register not registered in the system\n"; regis(); return; }
 
-       stu[i]->registerCourse(*cor[j]);
+        stu[i]->registerCourse(*cor[j]);
 
 
 
@@ -754,8 +782,10 @@ public:
     {
         cout << "Enter course id : ";
         int id;
+        cin >> id;
         cout << "Enter roll number: ";
         int r;
+        cin >> r;
         if (id < 1 || r < 1)
         {
             cout << "invalid input \n Enter values again"; unenroll(); return;
@@ -789,7 +819,7 @@ public:
             cor[j]->unenroll(*stu[i]);
         }
 
-        
+
 
 
 
@@ -798,8 +828,10 @@ public:
     {
         cout << "Enter course id : ";
         int id;
+        cin >> id;
         cout << "Enter roll number: ";
         int r;
+        cin >> r;
         if (id < 1 || r < 1)
         {
             cout << "invalid input \n Enter values again"; unenroll(); return;
@@ -830,7 +862,7 @@ public:
         }
         else
         {
-           stu[i]->withdraw(* cor[j]);
+            stu[i]->withdraw(*cor[j]);
         }
 
 
@@ -859,8 +891,8 @@ public:
         }
         if (!flag) { cout << "Student to be enrolled not registered n the system\n"; upstu(); return; }
         else {
-        
-        
+
+
             cout << "Enter name : ";
             string n;
             cin >> n;
@@ -873,7 +905,7 @@ public:
             cout << "Enter contact : "; string c;
             cin >> c;
             if (r < 0 || a < 0) { cout << "invalid input \n Enter values again"; upstu(); return; }
-            for (size_t j = 0; j < ts; i++)
+            for (size_t j = 0; j < ts; j++)
             {
                 if (stu[j]->getRollNum() == r)
                 {
@@ -883,8 +915,8 @@ public:
 
             }
             stu[i]->Update(n, r, a, c);
-        
-        
+
+
         }
 
     }
@@ -892,46 +924,46 @@ public:
     {
 
 
-        
-            char choice;
 
-            do {
-                cout << "Menu: \n";
-                cout << "1. Enroll a student\n";
-                cout << "2. Course Registration\n";
-                cout << "3. Attendance\n";
-                cout << "4. Marks\n";
-                cout << "5. Course Withdraw\n";
-                cout << "6. Exit\n";
-                cout << "Enter your choice: ";
-                cin >> choice;
+        char choice;
 
-                switch (choice) {
-                case '1':
-                    enrollStudent();
-                    break;
-                case '2':
-                    courseRegistration();
-                    break;
-                case '3':
-                    attendance();
-                    break;
-                case '4':
-                    marks();
-                    break;
-                case '5':
-                    courseWithdraw();
-                    break;
-                case '6':
-                    exitSystem();
-                    break;
-                default:
-                    cout << "Invalid choice. Please enter again.\n";
-                }
-            } while (choice != '6');
+        do {
+            cout << "Menu: \n";
+            cout << "1. Enroll a student\n";
+            cout << "2. Course Registration\n";
+            cout << "3. Attendance\n";
+            cout << "4. Marks\n";
+            cout << "5. Course Withdraw\n";
+            cout << "6. Exit\n";
+            cout << "Enter your choice: ";
+            cin >> choice;
 
-           
-    
+            switch (choice) {
+            case '1':
+                Stumenu();
+                break;
+            case '2':
+                coregMenu();
+                break;
+            case '3':
+                attmenu();
+                break;
+            case '4':
+                markmenu();
+                break;
+            case '5':
+                cowiMenu();
+                break;
+            case '6':
+                cout << "System exited"; return;
+                
+            default:
+                cout << "Invalid choice. Please enter again.\n";
+            }
+        } while (choice != '6');
+
+
+
     }
 
 
@@ -951,73 +983,390 @@ public:
 
             switch (choice) {
             case '1':
-                displayEnrolledStudents();
+                dispstu();
                 break;
             case '2':
-                addStudent();
+                addstudent();
                 break;
             case '3':
-                removeStudent();
+                removestudent();
                 break;
             case '4':
-                editStudentDetail();
+                upstu();
                 break;
             case '5':
-                goBack();
+                 return;
                 break;
             default:
                 cout << "Invalid choice. Please enter again.\n";
             }
         } while (choice != '5');
     }
+    void dispcourse()
+    {
+        for (size_t i = 0; i < tc; i++)
+        {
+            cor[i]->print();
 
+        }
+    }
 
     void coregMenu() {
         char choice;
 
         do {
             cout << "Menu: \n";
-            cout << "1. Display Available Courses\n";
-            cout << "2. Unregister a Course\n";
+            cout << "1. Display Al Courses\n";
+            cout << "2. Register a Course to a Student\n";
+            cout << "3. Add course to the system\n";
+            cout << "4. Back\n";
+            cout << "Enter your choice: ";
+            cin >> choice;
+
+            switch (choice) {
+            case '1':
+                dispcourse();
+                break;
+            case '2':
+               
+               regis();
+                break;
+            case '3':
+                addCourse();
+                break;
+            case '4':
+               return;
+                break;
+            default:
+                cout << "Invalid choice. Please enter again.\n";
+            }
+        } while (choice != '4');
+    }
+
+    void stuco(int n=0)
+    {
+        
+        cout << "Enter roll number: ";
+        int r;
+        cin >> r;
+        if ( r < 1)
+        {
+            cout << "invalid input \n Enter values again"; stuco(); return;
+        }
+
+
+        bool flag = false; int i = 0;
+        for (i = 0; i < ts; i++)
+        {
+            if (stu[i]->getRollNum() == r) { flag = true; break; }
+
+
+        }
+        if (!flag) { cout << "Student not registered in the system\n"; stuco(); return; }
+        stu[i]->disp(n);
+
+
+
+
+   }
+    void cowiMenu() {
+        char choice;
+
+        do {
+            cout << "Menu: \n";
+            cout << "1. Display Courses already enrolled by a student \n";
+            cout << "2. Withdraw a Course from a Student\n";
+            cout << "3. Remove course from the system\n";
+            cout << "4. Back\n";
+            cout << "Enter your choice: ";
+            cin >> choice;
+
+            switch (choice) {
+            case '1':
+                stuco();
+                break;
+            case '2':
+                withdraw();
+                break;
+            case '3':
+                removeCourse();
+                break;
+            case '4':
+               return;
+                break;
+            default:
+                cout << "Invalid choice. Please enter again.\n";
+            }
+        } while (choice != '4');
+    }
+    void markmenu()
+    {
+        char choice;
+
+        do {
+            cout << "Menu: \n";
+            cout << "1. Display marks of a student \n";
+            cout << "2. Assign marks a Student\n";
+          
             cout << "3. Back\n";
             cout << "Enter your choice: ";
             cin >> choice;
 
             switch (choice) {
             case '1':
-                displayAvailableCourses();
+                stuco(1);
                 break;
             case '2':
-                unregisterCourse();
+                assmark();
                 break;
             case '3':
-                goBack();
+            
+               return;
+                
                 break;
             default:
                 cout << "Invalid choice. Please enter again.\n";
             }
-        } while (choice != '6');
+        } while (choice != '3');
+
     }
+    void attmenu()
+    {
+        char choice;
+
+        do {
+            cout << "Menu: \n";
+            cout << "1. Display Attendance of a student \n";
+            cout << "2. Assign attendance a Student\n";
+
+            cout << "3. Back\n";
+            cout << "Enter your choice: ";
+            cin >> choice;
+
+            switch (choice) {
+            case '1':
+                stuco(2);
+                break;
+            case '2':
+              assat(); break;
+            case '3':
+
+               return;
+                break;
+            default:
+                cout << "Invalid choice. Please enter again.\n";
+            }
+        } while (choice != '3');
+
+    }
+    void assat()
+    {
+        cout << "Enter course id : ";
+        int id;
+        cin >> id;
+        cout << "Enter roll number: ";
+        int r;
+        cin >> r;
+        if (id < 1 || r < 1)
+        {
+            cout << "invalid input \n Enter values again"; enroll(); return;
+        }
+
+
+        bool flag = false; int i = 0;
+        for (i = 0; i < ts; i++)
+        {
+            if (stu[i]->getRollNum() == r) { flag = true; break; }
+
+
+        }
+        if (!flag) { cout << "Student not registered in the system\n"; assat(); return; }
+        flag = false; int j = 0;
+        for (j = 0; j < tc; j++)
+        {
+            if (cor[j]->getid() == id) { flag = true; break; }
+
+
+        }
+        if (!flag) { cout << "Course  not registered in the system\n"; assat(); return; }
+        cout << "enter attendace : ";
+        int m;
+        cin >> m;
+        
+             
+        stu[i]->markAttendance(*cor[j], m);
+    
+    
+    
+    
+    }
+    void assmark()
+    {
+        cout << "Enter course id : ";
+        int id;
+        cin >> id;
+        cout << "Enter roll number: ";
+        int r;
+        cin >> r;
+        if (id < 1 || r < 1)
+        {
+            cout << "invalid input \n Enter values again"; enroll(); return;
+        }
+
+
+        bool flag = false; int i = 0;
+        for (i = 0; i < ts; i++)
+        {
+            if (stu[i]->getRollNum() == r) { flag = true; break; }
+
+
+        }
+        if (!flag) { cout << "Student not registered in the system\n"; assat(); return; }
+        flag = false; int j = 0;
+        for (j = 0; j < tc; j++)
+        {
+            if (cor[j]->getid() == id) { flag = true; break; }
+
+
+        }
+        if (!flag) { cout << "Course  not registered in the system\n"; assat(); return; }
+        cout << "enter marks : ";
+        int m;
+        cin >> m;
+        stu[i]->assignMarks(*cor[j],m);
 
 
 
 
 
 
+    }
+    int validate_input(istream& is, int& num, string& line) {
+        while (is >> num) {
+            
+            if (num<0) {
+                return num;
+            }
+        }
+    }
+    void db()
+    {
+        fout.open("database.txt", ofstream::out | ofstream::trunc);
+        fout.close();
+        fout.open("database.txt");
+            fout << ts << endl;
+            for (size_t i = 0; i < ts; i++)
+            {
+                fout << stu[i]->getRollNum()<< endl;
+                fout << stu[i]->getName() << endl;
+                fout << stu[i]->getAge() << endl;
+                fout << stu[i]->getContact() << endl;
+            }
+            fout << tc << endl;
+            for (size_t i = 0; i < tc; i++)
+            {
+                fout << cor[i]->getid() << endl;
+                fout << cor[i]->getName() << endl;
+                fout << cor[i]->getInstructor() << endl;
+                fout << cor[i]->getCapacity() << endl;
+                fout << cor[i]->getCredits() << endl;
+            }
+
+            fout << ts << endl;
+            for (size_t i = 0; i < ts; i++)
+            {
+                fout << stu[i]->getRollNum() << endl;
+                fout << stu[i]->ts << endl;
+                for (size_t j = 0; j < stu[i]->ts; j++)
+                {
+                    fout << stu[i]->courses[j]->getid() << endl;
+                    fout << stu[i]->marks[j]<< endl;
+                    fout << stu[i]->attendance[j] << endl;
+                }
+               
+            }
+            fout.close();
+
+
+    }
+    void dbscan() {
+        fin.open("database.txt");
+        if (fin.is_open())cout << "bindas";
+        int st, ag, rn,cr;
+        string con, na;
+        fin >>st;
+        ts = st;
+        fin.ignore(1000, '\n');
+        stu = new Student * [st];
+        for (size_t i = 0; i < st; i++)
+        {
+            fin >> rn;
+            
+            fin.ignore(1000, '\n');
+            fin >> na;
+            fin >> ag;
+            fin.ignore(1000, '\n');
+            fin >> con;
+            stu[i] = new Student(na, rn, ag, con);
+        }
+        fin >> st;
+        tc = st;
+        fin.ignore(1000, '\n');
+        cor = new Course * [st];
+        for (size_t i = 0; i < st; i++)
+        {
+            fin >> rn;
+            fin.ignore(1000, '\n');
+            fin >> na;
+            
+            fin >> con;
+            fin >> ag;
+            fin.ignore(1000, '\n');
+            fin >> cr;
+            fin.ignore(1000, '\n');
+            cor[i] = new Course( rn,na,con,cr,ag);
+        }
+
+
+        fin >> st;
+        fin.ignore(1000, '\n');
+        for (size_t i = 0; i < st; i++)
+        {
+            fin >> rn;
+            fin.ignore(1000, '\n');
+            fin >> rn;
+            fin.ignore(1000, '\n');
+            for (size_t j = 0; j < rn; j++)
+            {
+                fin >> ag; fin.ignore(1000, '\n'); int k;
+                for ( k = 0; k< tc; k++)
+                {
+                    if (cor[k]->getid() == ag)break;
+
+                }
+                stu[i]->registerCourse(*cor[k]);
+                fin >> cr;
+                fin.ignore(1000, '\n');
+                 stu[i]->marks[j] =cr;
+                 fin >> cr;
+                 fin.ignore(1000, '\n');
+                 stu[i]->attendance[j] = cr;
+            }
+
+        }
+
+        fin.close();
+
+
+    }
 };
 
 
 int main() {
 
-    Student bia("abeeha", 6655, 21, "03334403648");
-    Student mojo("mojo", 6820, 19, "03334403648");
-
-    Course oop(1, "oop", "mubashir", 3, 50);
-    oop.enroll(mojo);
-    bia.registerCourse(oop);
-    mojo.withdraw(oop);
-    bia.assignMarks(oop, 85);
-    bia.markAttendance(oop, 23);
-    bia.disp();
+    flexsystem a;
+    a.dbscan();
+    a.menu();
+    a.db();
     return 0;
 }
