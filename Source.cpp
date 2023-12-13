@@ -1,75 +1,29 @@
 #include <iostream> 
 #include <string>
 #include <fstream>
+#include <SFML/Graphics.hpp>
+#include <SFML/Window/Mouse.hpp>
 #include"course.h"
 #include"student.h"
 using namespace std;
 
+sf::Vector2i getpos(const sf::Window& window) {
+
+    sf::Vector2i windowPosition = window.getPosition();
+
+
+    sf::Vector2i mousePosition = sf::Mouse::getPosition();
+
+
+    sf::Vector2i pos = mousePosition - windowPosition;
+
+    return pos;
+}
 ofstream fout;
 ifstream fin;
 class Student;
 class Course;
-
-//class Student {
-//private:
-//    string name;
-//    int roll_num;
-//    int age;
-//    string contact;
-//    Course** courses;
-//    int ts;
-//    int* attendance;
-//    int* marks;
-//
-//public:
-//    
-//    Student(string n, int r, int a, string c);
-//
-//    void Update(string n, int r, int a, string c);
-//    bool search(Course& a);
-//
-//    string getName();
-//    int getRollNum();
-//    int getAge();
-//
-//
-//
-//    void setName(string n);
-//    void setRollNum(int r);
-//    void setAge(int a);
-//    void setContact(string c);
-//
-//
-//    void print();
-//    void disp(int i);
-//    void registerCourse(Course& a);
-//    void withdraw(Course& a);
-//    void markAttendance(Course& a, int at);
-//    void assignMarks(Course& a, int at);
-//};
-//
-//class Course {
-//
-//private:
-//    int  code;
-//    string name;
-//    string instructor;
-//    int credits;
-//    int capacity;
-//    Student** students;
-//    int ts;
-//
-//public:
-//
-//    Course(int code, string name, string instructor, int credits, int capacity);
-//    void disp();
-//    void print();
-//    void enroll(Student& a);
-//    int getid();
-//    void unenroll(Student& a);
-//    bool search(Student& a);
-//};
-//
+//cousre functions 
 
 Course::Course(int code, string name, string instructor, int credits, int capacity)
     : code(code), name(name), instructor(instructor), credits(credits), capacity(capacity) {
@@ -169,13 +123,13 @@ void Course::unenroll(Student& a)
 
 
 
-int Course:: getCapacity() const {
+int Course::getCapacity() const {
     return capacity;
 }
-string Course:: getInstructor() {
+string Course::getInstructor() {
     return instructor;
 }
-string Course ::getName()  {
+string Course::getName() {
     return name;
 }
 
@@ -192,6 +146,13 @@ bool Course::search(Student& a)
 
 
 }
+
+
+//student functions
+
+
+
+
 Student::Student(string n, int r, int a, string c) :
     name(n), roll_num(r), age(a), contact(c) {
     ts = 0;
@@ -224,13 +185,14 @@ string Student::getContact() {
     return contact;
 }
 
-void Student::disp(int n=0) {print();
+void Student::disp(int n = 0) {
+    print();
     for (size_t i = 0; i < ts; i++)
     {
-        
+
         courses[i]->print();
-       if(n==2) cout << "Attendance :" << attendance[i] << "%" << endl;
-       if (n == 1)cout << "Marks :" << marks[i] << "%"<<endl;
+        if (n == 2) cout << "Attendance :" << attendance[i] << "%" << endl;
+        if (n == 1)cout << "Marks :" << marks[i] << "%" << endl;
 
     }
 
@@ -397,6 +359,11 @@ void Student::withdraw(Course& a) {
 
 
 }
+
+
+
+
+
 void Student::registerCourse(Course& a) {
 
     for (int i = 0; i < ts; i++)
@@ -477,6 +444,11 @@ void Student::registerCourse(Course& a) {
 
 }
 
+
+
+
+//flex system 
+
 class flexsystem {
 private:
     Student** stu;
@@ -491,7 +463,7 @@ public:
         ts = 0;
         tc = 0;
     }
-
+    // add remove student function
     void  addstudent()
     {
         cout << "Enter name : ";
@@ -596,6 +568,7 @@ public:
 
 
     }
+    // add remove course function
     void removeCourse()
     {
 
@@ -609,7 +582,7 @@ public:
 
 
         }
-        if (!flag) { cout << "Student to be enrolled not registered n the system\n"; removestudent(); return; }
+        if (!flag) { cout << "course to be enrolled not registered n the system\n"; removestudent(); return; }
         else {
             for (int j = 0; j < tc; j++)
             {
@@ -698,6 +671,7 @@ public:
 
 
     }
+    //enroll uneroll withdraw registration
     void enroll()
     {
         cout << "Enter course id : ";
@@ -870,6 +844,7 @@ public:
 
 
     }
+    //displayy update and other functionaliyies
     void dispstu() {
         for (size_t i = 0; i < ts; i++)
         {
@@ -920,6 +895,7 @@ public:
         }
 
     }
+    // main menu and sub emnus for con sole based imelementatuion 
     void menu()
     {
 
@@ -957,7 +933,7 @@ public:
                 break;
             case '6':
                 cout << "System exited"; return;
-                
+
             default:
                 cout << "Invalid choice. Please enter again.\n";
             }
@@ -996,7 +972,7 @@ public:
                 upstu(); db();
                 break;
             case '5':
-                 return;
+                return;
                 break;
             default:
                 cout << "Invalid choice. Please enter again.\n";
@@ -1011,7 +987,6 @@ public:
 
         }
     }
-
     void coregMenu() {
         char choice;
 
@@ -1029,28 +1004,27 @@ public:
                 dispcourse(); db();
                 break;
             case '2':
-               
-               regis(); db();
+
+                regis(); db();
                 break;
             case '3':
                 addCourse(); db();
                 break;
             case '4':
-               return;
+                return;
                 break;
             default:
                 cout << "Invalid choice. Please enter again.\n";
             }
         } while (choice != '4');
     }
-
-    void stuco(int n=0)
+    void stuco(int n = 0)
     {
-        
+
         cout << "Enter roll number: ";
         int r;
         cin >> r;
-        if ( r < 1)
+        if (r < 1)
         {
             cout << "invalid input \n Enter values again"; stuco(); return;
         }
@@ -1069,7 +1043,7 @@ public:
 
 
 
-   }
+    }
     void cowiMenu() {
         char choice;
 
@@ -1093,7 +1067,7 @@ public:
                 removeCourse(); db();
                 break;
             case '4':
-               return;
+                return;
                 break;
             default:
                 cout << "Invalid choice. Please enter again.\n";
@@ -1108,7 +1082,7 @@ public:
             cout << "Menu: \n";
             cout << "1. Display marks of a student \n";
             cout << "2. Assign marks a Student\n";
-          
+
             cout << "3. Back\n";
             cout << "Enter your choice: ";
             cin >> choice;
@@ -1121,9 +1095,9 @@ public:
                 assmark(); db();
                 break;
             case '3':
-            
-               return;
-                
+
+                return;
+
                 break;
             default:
                 cout << "Invalid choice. Please enter again.\n";
@@ -1149,10 +1123,10 @@ public:
                 stuco(2); db();
                 break;
             case '2':
-              assat(); db(); break;
+                assat(); db(); break;
             case '3':
 
-               return;
+                return;
                 break;
             default:
                 cout << "Invalid choice. Please enter again.\n";
@@ -1193,13 +1167,13 @@ public:
         cout << "enter attendace : ";
         int m;
         cin >> m;
-        
-             
+
+
         stu[i]->markAttendance(*cor[j], m);
-    
-    
-    
-    
+
+
+
+
     }
     void assmark()
     {
@@ -1234,7 +1208,7 @@ public:
         cout << "enter marks : ";
         int m;
         cin >> m;
-        stu[i]->assignMarks(*cor[j],m);
+        stu[i]->assignMarks(*cor[j], m);
 
 
 
@@ -1242,67 +1216,70 @@ public:
 
 
     }
+    // validate input takes value and checks for incorrect values 
     int validate_input(istream& is, int& num, string& line) {
         while (is >> num) {
-            
-            if (num<0) {
+
+            if (num < 0) {
                 return num;
             }
         }
     }
+    // builds a data base by fstream and and first clears the file
     void db()
     {
         fout.open("database.txt", ofstream::out | ofstream::trunc);
         fout.close();
         fout.open("database.txt");
-            fout << ts << endl;
-            for (size_t i = 0; i < ts; i++)
+        fout << ts << endl;
+        for (size_t i = 0; i < ts; i++)
+        {
+            fout << stu[i]->getRollNum() << endl;
+            fout << stu[i]->getName() << endl;
+            fout << stu[i]->getAge() << endl;
+            fout << stu[i]->getContact() << endl;
+        }
+        fout << tc << endl;
+        for (size_t i = 0; i < tc; i++)
+        {
+            fout << cor[i]->getid() << endl;
+            fout << cor[i]->getName() << endl;
+            fout << cor[i]->getInstructor() << endl;
+            fout << cor[i]->getCapacity() << endl;
+            fout << cor[i]->getCredits() << endl;
+        }
+
+        fout << ts << endl;
+        for (size_t i = 0; i < ts; i++)
+        {
+            fout << stu[i]->getRollNum() << endl;
+            fout << stu[i]->ts << endl;
+            for (size_t j = 0; j < stu[i]->ts; j++)
             {
-                fout << stu[i]->getRollNum()<< endl;
-                fout << stu[i]->getName() << endl;
-                fout << stu[i]->getAge() << endl;
-                fout << stu[i]->getContact() << endl;
-            }
-            fout << tc << endl;
-            for (size_t i = 0; i < tc; i++)
-            {
-                fout << cor[i]->getid() << endl;
-                fout << cor[i]->getName() << endl;
-                fout << cor[i]->getInstructor() << endl;
-                fout << cor[i]->getCapacity() << endl;
-                fout << cor[i]->getCredits() << endl;
+                fout << stu[i]->courses[j]->getid() << endl;
+                fout << stu[i]->marks[j] << endl;
+                fout << stu[i]->attendance[j] << endl;
             }
 
-            fout << ts << endl;
-            for (size_t i = 0; i < ts; i++)
-            {
-                fout << stu[i]->getRollNum() << endl;
-                fout << stu[i]->ts << endl;
-                for (size_t j = 0; j < stu[i]->ts; j++)
-                {
-                    fout << stu[i]->courses[j]->getid() << endl;
-                    fout << stu[i]->marks[j]<< endl;
-                    fout << stu[i]->attendance[j] << endl;
-                }
-               
-            }
-            fout.close();
+        }
+        fout.close();
 
 
     }
+    //scans the data base using file input
     void dbscan() {
         fin.open("database.txt");
-        if (fin.is_open())cout << "bindas";
-        int st, ag, rn,cr;
+
+        int st, ag, rn, cr;
         string con, na;
-        fin >>st;
+        fin >> st;
         ts = st;
         fin.ignore(1000, '\n');
         stu = new Student * [st];
         for (size_t i = 0; i < st; i++)
         {
             fin >> rn;
-            
+
             fin.ignore(1000, '\n');
             fin >> na;
             fin >> ag;
@@ -1319,13 +1296,13 @@ public:
             fin >> rn;
             fin.ignore(1000, '\n');
             fin >> na;
-            
+
             fin >> con;
             fin >> ag;
             fin.ignore(1000, '\n');
             fin >> cr;
             fin.ignore(1000, '\n');
-            cor[i] = new Course( rn,na,con,cr,ag);
+            cor[i] = new Course(rn, na, con, cr, ag);
         }
 
 
@@ -1340,7 +1317,7 @@ public:
             for (size_t j = 0; j < rn; j++)
             {
                 fin >> ag; fin.ignore(1000, '\n'); int k;
-                for ( k = 0; k< tc; k++)
+                for (k = 0; k < tc; k++)
                 {
                     if (cor[k]->getid() == ag)break;
 
@@ -1348,10 +1325,10 @@ public:
                 stu[i]->registerCourse(*cor[k]);
                 fin >> cr;
                 fin.ignore(1000, '\n');
-                 stu[i]->marks[j] =cr;
-                 fin >> cr;
-                 fin.ignore(1000, '\n');
-                 stu[i]->attendance[j] = cr;
+                stu[i]->marks[j] = cr;
+                fin >> cr;
+                fin.ignore(1000, '\n');
+                stu[i]->attendance[j] = cr;
             }
 
         }
@@ -1360,6 +1337,440 @@ public:
 
 
     }
+    //menus for sfml implementation
+    void  cowimen() {
+        sf::RenderWindow window(sf::VideoMode(1066, 600), "Main menu");
+
+
+        sf::Texture texture;
+        if (!texture.loadFromFile("cowi.jpg")) {
+            return;
+        }
+        sf::Sprite sprite(texture);
+
+
+        while (window.isOpen()) {
+            sf::Event event;
+            while (window.pollEvent(event)) {
+                if (event.type == sf::Event::Closed) {
+                    window.close();
+                }
+
+
+                if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+
+                    sf::Vector2i pos = getpos(window);
+
+
+
+
+                    if (pos.y > 199 && pos.y < 250) {
+                        window.close();
+                        system("cls");
+                        stuco();
+                        db();
+                        getchar();
+                        cowimen();
+                    }
+                    else if (pos.y > 280 && pos.y < 330) {
+                        window.close(); system("cls");
+                        withdraw();
+                        db();
+                        getchar();
+                        cowimen();
+                    }
+                    else if (pos.y > 360 && pos.y < 410) {
+                        window.close();
+                        system("cls");
+                        removeCourse();
+                        db();
+                        getchar();
+                        cowimen();
+                    }
+                    else if (pos.y > 435 && pos.y < 485) {
+                        window.close();
+                        sfmenu();
+                    }
+
+                    else {}
+
+
+                    break;
+                }
+            }
+
+            window.clear();
+
+
+            window.draw(sprite);
+
+            window.display();
+        }
+
+        return;
+    }
+    void  marmen() {
+        sf::RenderWindow window(sf::VideoMode(1066, 600), "Main menu");
+
+
+        sf::Texture texture;
+        if (!texture.loadFromFile("mark.jpg")) {
+            return;
+        }
+        sf::Sprite sprite(texture);
+
+
+        while (window.isOpen()) {
+            sf::Event event;
+            while (window.pollEvent(event)) {
+                if (event.type == sf::Event::Closed) {
+                    window.close();
+                }
+
+
+                if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+
+                    sf::Vector2i pos = getpos(window);
+
+
+
+
+                    if (pos.y > 199 && pos.y < 250) {
+
+                        window.close();
+                        system("cls");
+                        stuco(1);
+                        db();
+                        getchar();
+                        marmen();
+                    }
+                    else if (pos.y > 280 && pos.y < 330) {
+                        window.close();
+                        system("cls");
+                        assmark();
+                        db();
+                        getchar();
+                        marmen();
+                    }
+                    else if (pos.y > 360 && pos.y < 410) {
+                        window.close();
+                        sfmenu();
+                    }
+
+                    else {}
+
+
+                    break;
+                }
+            }
+
+            window.clear();
+
+            // Draw the sprite
+            window.draw(sprite);
+
+            window.display();
+        }
+
+        return;
+    }
+    void  attmen() {
+        sf::RenderWindow window(sf::VideoMode(1066, 600), "Main menu");
+
+
+        sf::Texture texture;
+        if (!texture.loadFromFile("att.jpg")) {
+            return;
+        }
+        sf::Sprite sprite(texture);
+
+
+        while (window.isOpen()) {
+            sf::Event event;
+            while (window.pollEvent(event)) {
+                if (event.type == sf::Event::Closed) {
+                    window.close();
+                }
+
+
+                if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+
+                    sf::Vector2i pos = getpos(window);
+
+
+
+
+                    if (pos.y > 199 && pos.y < 250) {
+
+                        window.close();
+                        system("cls");
+                        stuco(2);
+                        db();
+                        getchar();
+                        attmen();
+                    }
+                    else if (pos.y > 280 && pos.y < 330) {
+                        window.close();
+                        system("cls");
+                        assat();
+                        db();
+                        getchar();
+                        attmen();
+                    }
+                    else if (pos.y > 360 && pos.y < 410) {
+                        window.close();
+                        sfmenu();
+                    }
+
+                    else {}
+
+
+                    break;
+                }
+            }
+
+            window.clear();
+
+
+            window.draw(sprite);
+
+            window.display();
+        }
+
+        return;
+    }
+    void  coregmen() {
+        sf::RenderWindow window(sf::VideoMode(1066, 600), "Main menu");
+
+
+        sf::Texture texture;
+        if (!texture.loadFromFile("coreg.jpg")) {
+            return;
+        }
+        sf::Sprite sprite(texture);
+
+
+        while (window.isOpen()) {
+            sf::Event event;
+            while (window.pollEvent(event)) {
+                if (event.type == sf::Event::Closed) {
+                    window.close();
+                }
+
+
+                if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+
+                    sf::Vector2i pos = getpos(window);
+
+
+
+
+                    if (pos.y > 199 && pos.y < 250) {
+
+                        window.close();
+                        system("cls");
+                        dispcourse();
+                        db();
+                        getchar();
+                        coregmen();
+                    }
+                    else if (pos.y > 280 && pos.y < 330) {
+                        window.close();
+                        system("cls");
+                        regis();
+                        db();
+                        getchar();
+                        coregmen();
+                    }
+                    else if (pos.y > 360 && pos.y < 410) {
+                        window.close();
+                        system("cls");
+                        addCourse();
+                        db();
+                        getchar();
+                        coregmen();
+                    }
+                    else if (pos.y > 435 && pos.y < 485) {
+                        window.close();
+                        sfmenu();
+                    }
+
+                    else {}
+
+
+                    break;
+                }
+            }
+
+            window.clear();
+
+
+            window.draw(sprite);
+
+            window.display();
+        }
+
+        return;
+    }
+    void  stumen() {
+        sf::RenderWindow window(sf::VideoMode(1066, 600), "Main menu");
+
+
+        sf::Texture texture;
+        if (!texture.loadFromFile("student.jpg")) {
+            return;
+        }
+        sf::Sprite sprite(texture);
+
+
+        while (window.isOpen()) {
+            sf::Event event;
+            while (window.pollEvent(event)) {
+                if (event.type == sf::Event::Closed) {
+                    window.close();
+                }
+
+
+                if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+
+                    sf::Vector2i pos = getpos(window);
+
+
+
+
+                    if (pos.y > 199 && pos.y < 250) {
+
+                        window.close();
+                        system("cls");
+                        dispstu();
+                        db();
+                        getchar();
+                        stumen();
+                    }
+                    else if (pos.y > 280 && pos.y < 330) {
+                        window.close();
+                        system("cls");
+                        addstudent();
+                        db();
+                        getchar();
+                        stumen();
+                    }
+                    else if (pos.y > 360 && pos.y < 410) {
+                        window.close();
+                        system("cls");
+                        removestudent();
+                        db();
+                        getchar();
+                        stumen();
+                    }
+                    else if (pos.y > 435 && pos.y < 485) {
+                        window.close();
+                        system("cls");
+                        upstu();
+                        db();
+                        getchar();
+                        stumen();
+                    }
+                    else if (pos.y > 510 && pos.y < 560) {
+                        window.close();
+                        sfmenu();
+                    }
+
+                    else {}
+
+
+                    break;
+                }
+            }
+
+            window.clear();
+
+
+            window.draw(sprite);
+
+            window.display();
+        }
+
+        return;
+    }
+    void  sfmenu() {
+        sf::RenderWindow window(sf::VideoMode(1066, 600), "Main menu");
+
+
+        sf::Texture texture;
+        if (!texture.loadFromFile("menu.jpg")) {
+            return;
+        }
+        sf::Sprite sprite(texture);
+
+
+        while (window.isOpen()) {
+            sf::Event event;
+            while (window.pollEvent(event)) {
+                if (event.type == sf::Event::Closed) {
+                    window.close();
+                }
+
+
+                if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+
+                    sf::Vector2i pos = getpos(window);
+
+
+
+                    if (pos.y > 199 && pos.y < 250) {
+
+                        window.close();
+                        stumen();
+                    }
+                    else if (pos.y > 280 && pos.y < 330) {
+                        window.close();
+                        coregmen();
+                    }
+                    else if (pos.y > 360 && pos.y < 410) {
+                        window.close();
+                        attmen();
+                    }
+                    else if (pos.y > 435 && pos.y < 485) {
+                        window.close();
+                        marmen();
+                    }
+                    else if (pos.y > 510 && pos.y < 560) {
+                        window.close();
+                        cowimen();
+                    }
+                    else if (pos.y > 585) {
+                        window.close();
+                    }
+                    else {}
+
+
+                    break;
+                }
+            }
+
+            window.clear();
+
+
+            window.draw(sprite);
+
+            window.display();
+        }
+
+        return;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 };
 
 
@@ -1367,7 +1778,7 @@ int main() {
 
     flexsystem a;
     a.dbscan();
-    a.menu();
+    a.sfmenu();
     a.db();
     return 0;
 }
